@@ -61,7 +61,7 @@
       function loadQuestions(data) {
         let str = "<ul>";
         data?.forEach(function (item, index) {
-          str += `<li>${index + 1} ${item.title}</li>`;
+          str += `<li>${index + 1} - ${item.title}</li>`;
         });
         str += "</ul>";
 
