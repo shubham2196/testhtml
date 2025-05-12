@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Testing Api</h1>
+    <button id="login">Login</button>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+      $("#login").click(function () {
+        // alert();
+        $.ajax({
+          method: "POST",
+          url: "https://lms-dev.mediantlabs.com/api/login",
+          data: JSON.stringify({
+            email: "admin@example.com",
+            password: "password",
+          }),
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          success: function (res) {
+            console.log(res);
+            if (res.access_token) {
+              alert("Login Successfull");
+            }
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
