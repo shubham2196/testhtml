@@ -7,30 +7,66 @@
   </head>
   <body>
     <h1>Testing Api</h1>
-    <button id="login">Login</button>
+    <button id="login">Load All Questions</button>
+    <div id="ques"></div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>
       $("#login").click(function () {
-        // alert();
+        login().then(function (access_token) {
+          getQuestion(access_token);
+        });
+      });
+
+      function getQuestion(access_token) {
         $.ajax({
-          method: "POST",
-          url: "https://lms-dev.mediantlabs.com/api/login",
-          data: JSON.stringify({
-            email: "admin@example.com",
-            password: "password",
-          }),
+          method: "GET",
+          url: "https://lms-dev.mediantlabs.com/api/questions",
           headers: {
             accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: "Bearer " + access_token,
           },
           success: function (res) {
             console.log(res);
-            if (res.access_token) {
-              alert("Login Successfull");
-            }
+            loadQuestions(res.data);
           },
         });
-      });
+      }
+
+      function login() {
+        return new Promise(function (resolve, reject) {
+          $.ajax({
+            method: "POST",
+            url: "https://lms-dev.mediantlabs.com/api/login",
+            data: JSON.stringify({
+              email: "admin@example.com",
+              password: "password",
+            }),
+            headers: {
+              accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            success: function (res) {
+              console.log(res);
+              if (res.access_token) {
+                alert("Login Successfull");
+                resolve(res.access_token);
+                return;
+              }
+            },
+          });
+        });
+      }
+
+      function loadQuestions(data) {
+        let str = "<ul>";
+        data?.forEach(function (item, index) {
+          str += `<li>${index + 1} ${item.title}</li>`;
+        });
+        str += "</ul>";
+
+        $("#ques").html(str);
+      }
     </script>
   </body>
 </html>
